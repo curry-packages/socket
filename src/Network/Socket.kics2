@@ -33,12 +33,10 @@ external_d_C_listenOnFresh _ _ = toCurry listenOnFreshPort
 -------------------------------------------------
 
 acceptOld ::  Socket -> IO (Handle, HostName, PortNumber)
-acceptOld sock = do (s, addr) <- Network.Socket.accept sock
-                    h <- socketToHandle s ReadWriteMode
+acceptOld sock = do (s, peer) <- Network.Socket.accept sock
                     p <- socketPort s
-                    n <- getSocketName s
-                    (Just hn, _) <- getNameInfo [] True False n
-                    return (h, hn, p)
+                    h <- socketToHandle s ReadWriteMode
+                    return (h, show peer, p)
 
 listenOn :: PortNumber -> IO Socket
 listenOn pn = do  
