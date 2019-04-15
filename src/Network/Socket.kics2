@@ -40,7 +40,7 @@ acceptOld sock = do (s, peer) <- Network.Socket.accept sock
 
 listenOn :: PortNumber -> IO Socket
 listenOn pn = do  
-  let hints = defaultHints { addrFlags = [AI_PASSIVE], addrSocketType = Stream }
+  let hints = defaultHints { addrFlags = [AI_PASSIVE] }
   addr:_ <- getAddrInfo (Just hints) Nothing (Just (show pn))
   sock <- socket (addrFamily addr) (addrSocketType addr) (addrProtocol addr)
   setSocketOption sock ReuseAddr 1
@@ -55,7 +55,7 @@ sClose = close
 
 connectTo :: HostName -> PortNumber -> IO Handle
 connectTo s a = do 
-  let hints = defaultHints { addrSocketType = Stream }
+  let hints = defaultHints
   addr:_ <- getAddrInfo (Just hints) (Just s) (Just (show a))
   sock <- socket (addrFamily addr) (addrSocketType addr) (addrProtocol addr)
   connect sock (addrAddress addr)
